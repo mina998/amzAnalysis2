@@ -240,7 +240,7 @@ class Product(Http):
 
             self.__tor_control = controller
 
-        except Exception as e: print('TOR服务出错:', e)
+        except Exception as e: exit('TOR链接失败: {}'.format(e))
 
 
 
