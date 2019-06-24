@@ -1,5 +1,7 @@
 from gevent import monkey
 
+from conn import CONTROL_PORT, SOCKS5H_POST
+
 monkey.patch_all()
 import json, gevent, random,time
 from stem import Signal
@@ -12,7 +14,6 @@ from amazon.assist.utils import Rule, Tools, sqlite
 class Product(Http):
 
 
-
     def __call__(self, queue, api='tor', debug=False):
         """
         # 运行
@@ -21,10 +22,11 @@ class Product(Http):
         :param debug: 请调模式
         :return:
         """
-        self.__proxy = {'http':'socks5://127.0.0.1:9050', 'https':'socks5://127.0.0.1:9050'}
+        self.__proxy = {'http':'socks5://127.0.0.1:%d'%SOCKS5H_POST, 'https':'socks5://127.0.0.1:%d'%SOCKS5H_POST}
         self.__debug = debug
         self.__queue = queue
-        self.__api_ = api
+        self.__api_  = api
+        self.__proxie= ''
 
         if api == 'tor': self.__conncet_tor()
         elif not api: self.__proxy= None
@@ -67,11 +69,12 @@ class Product(Http):
 
             self.__status_up(ids, status=1)
 
+            self.__proxy_change()
+
             tasks = [gevent.spawn(self.__main_, row) for row in res]
 
             gevent.joinall(tasks)
 
-            self.__proxy_change()
 
 
 
@@ -80,9 +83,6 @@ class Product(Http):
         # 主函数
         :return:
         """
-
-        self.__text_proxies = self.__test_proxy()
-
         session = self.session(cookies=self.__queue.get(), proxies=self.__proxy)
 
         message = self.__get_(session, row)
@@ -91,7 +91,7 @@ class Product(Http):
 
             self.__status_up(row[0])
 
-            if self.__debug: print(message, self.__text_proxies)
+            if self.__debug: print(message, self.__proxie)
 
         s = random.randint(1, 6)
 
@@ -186,7 +186,7 @@ class Product(Http):
 
         sqlite.commit()
 
-        print('{}, 库存:{}, 价格:{}, 排名:{}. {}'.format(asin, stock.rjust(3), price.rjust(6), rank.rjust(7), self.__text_proxies))
+        print('{}, 库存:{}, 价格:{}, 排名:{}. {}'.format(asin, stock.rjust(3), price.rjust(6), rank.rjust(7), self.__proxie))
 
 
     #
@@ -215,15 +215,28 @@ class Product(Http):
         # 切换代理IP
         :return:
         """
+
+        if self.__api_.startswith('http'):
+
+            text = self.session().get(self.__api_).text
+
+            self.__proxy = json.loads(text)
+
+            self.__proxie = self.__proxy.get('http')
+
+
         try:
+            if isinstance(self.__tor_control, Controller):
 
-            if self.__api_.startswith('http'):
+                self.__tor_control.signal(Signal.NEWNYM)  # 更新IP
 
-                text = self.session().get(self.__api_).text
+                if self.__debug:
 
-                self.__proxy = json.loads(text)
+                    text = self.session(proxies=self.__proxy).get('https://api.ipify.org?format=json').text
 
-            if isinstance(self.__tor_control, Controller): self.__tor_control.signal(Signal.NEWNYM)  # 更新IP
+                    self.__proxie = json.loads(text).get('ip')
+
+                else: self.__proxie = 'tor proxies.'
 
         except Exception as e: exit('切换代理失败:{}'.format(e))
 
@@ -238,7 +251,7 @@ class Product(Http):
         """
         try:
             # 注意端口 容易引起连接失败.
-            controller = Controller.from_port(port=9051)
+            controller = Controller.from_port(port=CONTROL_PORT)
 
             controller.authenticate()
 
@@ -253,9 +266,6 @@ class Product(Http):
         # 测试代理是否正常
         :return:
         """
-        if self.__debug is False: return ''
-
-        if self.__api_: return self.__proxy.get('http')
 
         # 查看TOR 代理
         try:
