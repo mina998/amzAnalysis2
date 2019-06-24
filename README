@@ -1,0 +1,31 @@
+洋葱网络访问版
+
+a.#安装配置tor
+
+    1. apt install tor
+
+    #重启,让socks监听9050端口
+    2. /etc/init.d/tor restart
+
+    #生成密码 生成你的密码 yourpassword 为定义的密码, 记下来生成的密码
+    3. tor --hash-password yourpassword
+
+    #编辑/etc/tor/torrc, 去掉下面行的注释
+    4. ControlPort 9051
+
+    #编辑/etc/tor/torrc, 去掉下面行的注释 并替换刚才生成的密码
+    5. HashedControlPassword 16:872860B76453A77D60CA2BB8C1A7042072093276A3D701AD684053EC4C
+
+    #重启, 让ControlPort监听9051端口
+    6. /etc/init.d/tor restart
+
+
+b.# 其他配置
+
+    1. 安装Python3 环境
+
+    #安装依赖包
+    2. pip3 install -r requirements.txt
+
+    #运行程序
+    3. python3 manage.py
