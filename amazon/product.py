@@ -80,6 +80,7 @@ class Product(Http):
         # 主函数
         :return:
         """
+
         self.__text_proxies = self.__test_proxy()
 
         session = self.session(cookies=self.__queue.get(), proxies=self.__proxy)
@@ -254,13 +255,15 @@ class Product(Http):
         """
         if self.__debug is False: return ''
 
-        if self.__tor_control:
+        if self.__api_: return self.__proxy.get('http')
 
+        # 查看TOR 代理
+        try:
             text = self.session(proxies=self.__proxy).get('https://api.ipify.org?format=json').text
 
             return json.loads(text).get('ip')
 
-        if self.__api_: return self.__proxy.get('http')
+        except Exception as e: print('TOR代理:', e)
 
 
 
