@@ -93,6 +93,7 @@ class Product(Http):
             if self.__debug: print(message, self.__text_proxies)
 
         s = random.randint(1, 6)
+
         gevent.sleep(s)
 
 
@@ -223,7 +224,9 @@ class Product(Http):
 
             if isinstance(self.__tor_control, Controller): self.__tor_control.signal(Signal.NEWNYM)  # 更新IP
 
-        except Exception as e: print('连接错误:', e)
+        except Exception as e: exit('切换代理失败:{}'.format(e))
+
+
 
 
 
