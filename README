@@ -27,5 +27,14 @@ b.# 其他配置
     #安装依赖包
     2. pip3 install -r requirements.txt
 
+    #下载代码
+    3. git clone https://github.com/mina998/amzAnalysis2.git
+
+    #切换目录
+    4. cd amzAnalysis2
+
+    #考备数据库
+    5. cp data.db.bak data.db
+
     #运行程序
-    3. python3 manage.py
+    6. python3 manage.py
