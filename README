@@ -24,14 +24,14 @@ b.# 其他配置
 
     1. 安装Python3 环境
 
-    #安装依赖包
-    2. pip3 install -r requirements.txt
-
     #下载代码
-    3. git clone https://github.com/mina998/amzAnalysis2.git
+    2. git clone https://github.com/mina998/amzAnalysis2.git
 
     #切换目录
-    4. cd amzAnalysis2
+    3. cd amzAnalysis2
+
+    #安装依赖包
+    4. pip3 install -r requirements.txt
 
     #考备数据库
     5. cp data.db.bak data.db

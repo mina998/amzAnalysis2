@@ -21,7 +21,7 @@ class Product(Http):
         :param debug: 请调模式
         :return:
         """
-        self.__proxy = {'http':'socks5h://127.0.0.1:9150', 'https':'socks5h://127.0.0.1:9150'}
+        self.__proxy = {'http':'socks5://127.0.0.1:9150', 'https':'socks5://127.0.0.1:9150'}
         self.__debug = debug
         self.__queue = queue
         self.__api_ = api
@@ -39,6 +39,10 @@ class Product(Http):
         :return:
         """
         while True:
+
+            # 如果没有内容, 等侍60秒
+            if not sqlite.execute('select count(id) from listing').fetchone()[0]: gevent.sleep(60)
+
             # 下次执行剩余
             exe = Tools.next_time_stamp() - Tools.time_stamp_now(t=True)
             # 每次查询几香槟酒
