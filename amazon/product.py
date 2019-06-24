@@ -21,7 +21,7 @@ class Product(Http):
         :param debug: 请调模式
         :return:
         """
-        self.__proxy = {'http':'socks5://127.0.0.1:9150', 'https':'socks5://127.0.0.1:9150'}
+        self.__proxy = {'http':'socks5://127.0.0.1:9050', 'https':'socks5://127.0.0.1:9050'}
         self.__debug = debug
         self.__queue = queue
         self.__api_ = api
@@ -234,9 +234,9 @@ class Product(Http):
         """
         try:
             # 注意端口 容易引起连接失败.
-            controller = Controller.from_port(port=9151)
+            controller = Controller.from_port(port=9051)
 
-            controller.authenticate(password='mina998')
+            controller.authenticate()
 
             self.__tor_control = controller
 
