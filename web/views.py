@@ -69,7 +69,7 @@ def index():
 
     ssub = db.session.query(Marks, db.func.max(Marks.uptime).label('sss')).group_by(Marks.asin_id).subquery()
 
-    data = db.session.query((Listing.id).label('aid'), Listing.img, Listing.asin, Listing.adtime, ssub).join(
+    data = db.session.query((Listing.id).label('aid'), Listing.img, Listing.asin, Listing.adtime, Listing.seller, ssub).join(
         ssub, isouter=True).order_by(Listing.adtime.desc()).limit(20).offset((curr-1)*20).all()
 
     coun = db.session.query(db.func.count(Listing.asin).label('count')).one()

@@ -3,12 +3,11 @@ from gevent import monkey
 from conn import CONTROL_PORT, SOCKS5H_POST
 
 monkey.patch_all()
-import json, gevent, random,time
+import json, gevent, random
 from stem import Signal
 from stem.control import Controller
 from amazon.assist.http import Http
-from amazon.assist.utils import Rule, Tools, sqlite
-
+from amazon.assist.utils import Rule, Tools, sqlite, Xpath
 
 
 class Product(Http):
@@ -58,7 +57,7 @@ class Product(Http):
 
                 if exe > 1:
                     print('倒计时: {}秒'.format(exe))
-                    time.sleep(10)
+                    gevent.sleep(10)
                     continue
 
                 sqlite.execute('update listing set status=0')
@@ -108,9 +107,9 @@ class Product(Http):
 
         id, asin, seller = row
         # 主机
-        host = 'https://www.amazon.com'
+        link = 'https://www.amazon.com/dp/{}?m={}&th=1&psc=1'.format(asin, seller)
         # URI
-        link = host + '/dp/{}?m={}'.format(asin, seller) if seller else host + '/dp/' + asin
+        # link = '{}{}?m={}&th=1&psc=1' if seller else '{}{}?th=1&psc=1'.format(host, asin)
         # 发送请求
         html = self.client(session, link)
 
@@ -134,7 +133,8 @@ class Product(Http):
 
         imge = Rule(r'colorImages\'.*?(https.*?)"', html).first()
 
-        price = Rule(r'id=\"priceblock_ourprice.*?>\$([\d.]+)<', html).first()
+        # price = Rule(r'id=\"priceblock_ourprice.*?>\$([\d.]+)<', html).first()
+        price = Xpath('//*[@id="price_inside_buybox"]/text()', html).first().replace('$','')
         if not price: return '{}, 价格获取失败.'.format(asin)
 
         stock = Rule(r'Only (\d+?) left in stock - order soon.', html).first()
@@ -152,7 +152,7 @@ class Product(Http):
         :param asin:
         :return:
         """
-        data = {'ASIN': asin, 'verificationSessionID': session.cookies.get('session-id'), 'quantity': '99999'}
+        data = {'ASIN': asin, 'verificationSessionID': session.cookies.get('session-id'), 'quantity': '999'}
         #Post地址
         link = 'https://www.amazon.com/gp/add-to-cart/json/ref=dp_start-bbf_1_glance'
         #开始发送
@@ -242,8 +242,6 @@ class Product(Http):
 
 
 
-
-
     def __conncet_tor(self):
         """
         # 连接到TOR网络
@@ -260,20 +258,6 @@ class Product(Http):
         except Exception as e: exit('TOR链接失败: {}'.format(e))
 
 
-
-    def __test_proxy(self):
-        """
-        # 测试代理是否正常
-        :return:
-        """
-
-        # 查看TOR 代理
-        try:
-            text = self.session(proxies=self.__proxy).get('https://api.ipify.org?format=json').text
-
-            return json.loads(text).get('ip')
-
-        except Exception as e: print('TOR代理:', e)
 
 
 

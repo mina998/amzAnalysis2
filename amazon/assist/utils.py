@@ -6,6 +6,8 @@ from conn import SQLITE_DB_URI
 
 class Tools():
 
+
+
     @staticmethod
     def current_time(str='%Y-%m-%d %H:%M:%S'):
         """
@@ -66,7 +68,10 @@ class Xpath():
         :return:
         """
         if not self.result: return default
-        return self.result[0]
+        return self.result[0].strip()
+
+
+
 
 
 

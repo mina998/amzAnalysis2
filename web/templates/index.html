@@ -23,7 +23,7 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td>{% if item.img %}<img src="{{ item.img }}" height="50">{% else %} 未抓取 {% endif %}</td>
-            <td><a href="https://www.amazon.com/dp/{{item.asin}}" target="_blank" style="color:#1E9FFF">{{ item.asin }}</a></td>
+            <td><a href="https://www.amazon.com/dp/{{item.asin}}?th=1&psc=1&m={{item.seller}}" target="_blank" style="color:#1E9FFF">{{item.asin}}</a></td>
             <td id="exe">
                 <a href="{{url_for('ams.delasin', id=item.aid)}}" class="layui-btn layui-btn-xs layui-btn-normal">删除</a>
                 <a href="{{url_for('ams.lists')}}?id={{item.aid}}" class="layui-btn layui-btn-xs">排名</a>
