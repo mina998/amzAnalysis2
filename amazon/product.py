@@ -22,7 +22,7 @@ class Product(Http):
         :param debug: 请调模式
         :return:
         """
-        self.__proxy = {'http':'socks5://127.0.0.1:%d'%SOCKS5H_POST, 'https':'socks5://127.0.0.1:%d'%SOCKS5H_POST}
+        self.__proxy = {'http':'socks5h://127.0.0.1:%d'%SOCKS5H_POST, 'https':'socks5h://127.0.0.1:%d'%SOCKS5H_POST}
         self.__debug = debug
         self.__queue = queue
         self.__api_  = api
@@ -178,7 +178,7 @@ class Product(Http):
         :param id:
         :return:
         """
-        sql = 'insert into marks (price,stock,bsr,uptime,asin_id) values ({},{},{},datetime("now"),{})'.format(price,stock,rank,id)
+        sql = 'insert into marks (price,stock,bsr,uptime,asin_id) values ({},{},{},datetime("now","localtime"),{})'.format(price,stock,rank,id)
         sqlite.execute(sql)
 
         sql = 'update listing set img = "{}" where id={}'.format(imge, id)
