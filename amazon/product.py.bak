@@ -209,6 +209,19 @@ class Product(Http):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     def __proxy_change(self):
 
         """
