@@ -112,7 +112,7 @@ class Product(Http):
 
         imge = Rule(r'colorImages\'.*?(https.*?)"', html).first()
 
-        xpath = '//*[@id="price_inside_buybox"]/text() or @id="priceblock_ourprice"]/text()'
+        xpath  = '//*[@id="price_inside_buybox" or @id="priceblock_ourprice"]/text()'
         price = Xpath(xpath, html).first().replace('$','')
         if not price: return '{}, 价格获取失败.'.format(asin)
 
