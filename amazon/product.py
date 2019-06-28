@@ -89,8 +89,6 @@ class Product(Http):
         id, asin, seller = row
         # 主机
         link = 'https://www.amazon.com/dp/{}?m={}&th=1&psc=1'.format(asin, seller)
-        # URI
-        # link = '{}{}?m={}&th=1&psc=1' if seller else '{}{}?th=1&psc=1'.format(host, asin)
         # 发送请求
         html = self.client(session, link)
 
