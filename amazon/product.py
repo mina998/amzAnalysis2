@@ -41,8 +41,6 @@ class Product(Http):
         """
         while True:
 
-            # 如果没有内容, 等侍60秒
-            if not sqlite.execute('select count(id) from listing').fetchone()[0]: gevent.sleep(60)
 
             asins = self.__asin_get()
 
@@ -116,8 +114,8 @@ class Product(Http):
 
         imge = Rule(r'colorImages\'.*?(https.*?)"', html).first()
 
-        # price = Rule(r'id=\"priceblock_ourprice.*?>\$([\d.]+)<', html).first()
-        price = Xpath('//*[@id="price_inside_buybox"]/text()', html).first().replace('$','')
+        xpath = '//*[@id="price_inside_buybox"]/text() or @id="priceblock_ourprice"]/text()'
+        price = Xpath(xpath, html).first().replace('$','')
         if not price: return '{}, 价格获取失败.'.format(asin)
 
         stock = Rule(r'Only (\d+?) left in stock - order soon.', html).first()
