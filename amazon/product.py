@@ -1,5 +1,4 @@
 from gevent import monkey
-
 from conn import CONTROL_PORT, SOCKS5H_POST
 
 monkey.patch_all()
@@ -71,7 +70,7 @@ class Product(Http):
 
             self.__status_up(row[0])
 
-            if self.__debug: print(message, self.__proxie)
+            if self.__debug: self.log.warning(message+' '+self.__proxie)
 
         s = random.randint(1, 6)
 
@@ -98,7 +97,7 @@ class Product(Http):
 
             self.__status_up(id, time=-1)
 
-            print('{}, 商品已下架.'.format(asin))
+            self.log.warning('{}, 商品已下架.'.format(asin))
 
             return None
 
@@ -174,7 +173,7 @@ class Product(Http):
 
         sqlite.commit()
 
-        print('{}, 库存:{}, 价格:{}, 排名:{}. {}'.format(asin, stock.rjust(3), price.rjust(6), rank.rjust(7), self.__proxie))
+        self.log.warning('{}, 库存:{}, 价格:{}, 排名:{}. {}'.format(asin, stock.rjust(3), price.rjust(6), rank.rjust(7), self.__proxie))
 
 
     #
@@ -213,7 +212,7 @@ class Product(Http):
 
             print('等侍下次抓取......')
 
-            gevent.sleep(600)
+            gevent.sleep(10)
 
 
 

@@ -29,11 +29,14 @@ b.# 其他配置
     4. cp data.db.bak data.db
 
     #运行程序
-    5. python3 manage.py >/root/run.log 2>&1 &
+    5. python3 manage.py >>/root/run.log 2>&1 &
+       或者
+       nohup python3 manage.py >> /root/run.log 2>&1 &
+
     
     #定时清理日志
     6. crontab -e
-       输入 * * * * 6 cat /dev/null > /root/run.log
+       输入 * * * * 6 echo > /root/run.log
     
        
        

@@ -1,11 +1,10 @@
-import requests
+import logging, requests
 from fake_useragent import UserAgent
 
 
 class Http(object):
 
-
-
+    log = logging.getLogger(__name__)
 
     def session(self, proxies={}, cookies=None):
 
@@ -34,8 +33,8 @@ class Http(object):
 
             if code in [200, 201]: return result.text
 
-            print('HTTP状态:[{}], {}'.format(code, url))
+            self.log.warning('HTTP状态:[{}], {}'.format(code, url))
 
-        except Exception as e: print('错误信息:',e)
+        except Exception as e: self.log.warning('错误信息:',e)
 
         return ''

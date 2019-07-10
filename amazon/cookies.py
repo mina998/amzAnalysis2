@@ -22,7 +22,7 @@ class Cookies(Http):
 
         while True:
 
-            if self.__queue.full(): print('Cookies池已满....')
+            if self.__queue.full(): self.log.warning('Cookies池已满....')
 
             tasks = [gevent.spawn(self.__main_) for i in range(5)]
 
@@ -39,7 +39,7 @@ class Cookies(Http):
 
         message = self.__get_(session)
 
-        if self.__debug and message: print(message)
+        if self.__debug and message: self.log.warning(message)
 
 
 
