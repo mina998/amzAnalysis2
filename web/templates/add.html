@@ -29,7 +29,7 @@
                 var msg = '添加成功!'
                 $.post('', data.field, function (res) {
                     if (res.length>0){
-                        msg = '<strong>已删除以下重复信息!</strong><br>'
+                        msg = '<strong>已更新以下重复信息状态!</strong><br>'
                         $.each(res,function (i,obj) {
                             if (obj.length == 2){
                                 msg += obj[0]+':'+obj[1]+"<br>"

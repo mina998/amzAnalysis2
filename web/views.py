@@ -14,26 +14,6 @@ def verify_login(*args, **kwargs):
     return redirect(url_for('ams.login'))
 
 
-@ams.route('/logdel')
-def logdel():
-
-    return ''
-#     trace = LOGS_PATH + "/trace.txt"
-#     other = LOGS_PATH + "/other.txt"
-#
-#     # 判断文件是否存在
-#     if (os.path.exists(trace)):
-#         with open(trace, "r+") as f:
-#             f.truncate()
-#
-#     if (os.path.exists(other)):
-#         with open(other, "r+") as f:
-#             f.truncate()
-#
-#     # if (os.path.exists(other)):
-#     #     os.remove(other)
-#
-#     return redirect(url_for('ams.index'))
 
 
 #
@@ -83,9 +63,6 @@ def index():
 @ams.route('/add', methods=['GET', 'POST'])
 def add():
 
-    # user = User(name='admin',pwd='1111')
-    # db.session.add(user)
-    # db.session.commit()
 
     if request.method == 'POST':
 
@@ -98,7 +75,11 @@ def add():
 
             seller = row[1] if len(row) > 1 else ''
 
-            if Listing.query.filter(Listing.asin == row[0], Listing.seller == seller).first():
+            obj = Listing.query.filter(Listing.asin == row[0], Listing.seller == seller).first()
+
+            if obj:
+                obj.status = 0
+                db.session.commit()
                 rowss.append(row)
                 continue
 

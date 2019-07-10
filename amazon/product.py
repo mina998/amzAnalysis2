@@ -94,7 +94,16 @@ class Product(Http):
 
         if html == '': return '{}, 获取不到HTML.'.format(asin)
 
+        elif 'Currently unavailable.' in html:
+
+            self.__status_up(id, time=-1)
+
+            print('{}, 商品已下架.'.format(asin))
+
+            return None
+
         elif 'Enter the characters you see below' in html: return '{}, 出现验证码.'.format(asin)
+
 
         return self.__parse(html, asin, id, session)
 
@@ -177,11 +186,10 @@ class Product(Http):
         :return:
         """
 
-        if isinstance(ids, list):
-
-            ids = ','.join([str(id) for id in ids])
+        if isinstance(ids, list): ids = ','.join([str(id) for id in ids])
 
         sql = 'update listing set status ={} where id in ({})'.format(time, ids)
+
         sqlite.execute(sql)
 
         sqlite.commit()
@@ -194,7 +202,7 @@ class Product(Http):
         num = random.randint(3, 8)
         # 每天早上8点时间戳
         exe = 'strftime("%s","now", "start of day")'
-        sql = 'select id,asin,seller from listing where status < {} order by random() limit {}'.format(exe, num)
+        sql = 'select id,asin,seller from listing where status < {} and status > -1 order by random() limit {}'.format(exe, num)
 
 
         while True:
@@ -205,7 +213,7 @@ class Product(Http):
 
             print('等侍下次抓取......')
 
-            gevent.sleep(30)
+            gevent.sleep(600)
 
 
 

@@ -17,14 +17,6 @@
         <li class="layui-nav-item {% if request.path == '/add' %} layui-this {% endif %}"><a href="{{ url_for('ams.add') }}">添加数据</a></li>
         <li class="layui-nav-item {% if request.path == '/export' %} layui-this {% endif %}"><a href="{{ url_for('ams.export', id='0') }}">导出全部</a></li>
         <li class="layui-nav-item">
-            <a href="javascript:;">查看日志</a>
-            <dl class="layui-nav-child">
-              <dd><a target="_blank" href="{{ url_for('static', filename='assets/logs/trace.txt') }}">追踪日志</a></dd>
-              <dd><a target="_blank" href="{{ url_for('static', filename='assets/logs/other.txt') }}">其他日志</a></dd>
-              <dd><a href="{{ url_for('ams.logdel') }}">清空日志</a></dd>
-            </dl>
-        </li>
-        <li class="layui-nav-item">
             {% if session.get('user_id')%}
                 <a href="{{ url_for('ams.login') }}?s=1">退出</a>
             {% else %}
