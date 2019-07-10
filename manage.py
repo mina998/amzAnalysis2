@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
 
 #获取COOKIES
-    kwargs = dict(queue=queue, zip=10001, debug=0)
+    kwargs = dict(queue=queue, zip=10001, debug=debug)
     t1 = Process(target=Cookies(), kwargs=kwargs)
     t1.start()
 

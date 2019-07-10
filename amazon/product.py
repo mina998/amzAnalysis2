@@ -173,7 +173,7 @@ class Product(Http):
 
         sqlite.commit()
 
-        self.log.warning('{}, 库存:{}, 价格:{}, 排名:{}. {}'.format(asin, stock.rjust(3), price.rjust(6), rank.rjust(7), self.__proxie))
+        print('{}, 库存:{}, 价格:{}, 排名:{}. {}'.format(asin, stock.rjust(3), price.rjust(6), rank.rjust(7), self.__proxie))
 
 
     #

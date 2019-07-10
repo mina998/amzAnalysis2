@@ -8,7 +8,7 @@ class Http(object):
 
     def session(self, proxies={}, cookies=None):
 
-        headers = {'User-Agent': UserAgent().chrome}
+        headers = {'User-Agent': UserAgent(verify_ssl=False).chrome}
 
         session = requests.session()
 
