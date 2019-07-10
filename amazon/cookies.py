@@ -92,7 +92,7 @@ class Cookies(Http):
 
             self.__queue.put(cookies)
 
-            return 'Ubid:{}'.format(ubid)
+            print('Ubid:', ubid)
 
         else: return 'ubid-main 获取失败.'
 
